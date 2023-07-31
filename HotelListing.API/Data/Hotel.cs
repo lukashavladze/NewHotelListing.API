@@ -14,8 +14,6 @@ namespace HotelListing.API.Data
 
         [ForeignKey(nameof(CountryId))]
         public int CountryId { get; set; }
-
-        [JsonIgnore]
         public Country Country { get; set; }
 
     }

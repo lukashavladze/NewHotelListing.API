@@ -2,10 +2,12 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HotelListing.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Temp : Migration
+    public partial class migration1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,19 +24,6 @@ namespace HotelListing.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Universitys",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Universitys", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,37 +48,30 @@ namespace HotelListing.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name", "ShortName" },
+                values: new object[,]
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UniversityId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
+                    { 1, "Jamaica", "JM" },
+                    { 2, "Bahamas", "BS" },
+                    { 3, "Cayman Island", "CI" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Hotels",
+                columns: new[] { "Id", "Address", "CountryId", "Name", "Rating" },
+                values: new object[,]
                 {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Universitys_UniversityId",
-                        column: x => x.UniversityId,
-                        principalTable: "Universitys",
-                        principalColumn: "Id");
+                    { 1, "Negril", 1, "Sandals Resort and Spa", 4.5 },
+                    { 2, "George Town", 3, "Comfort Suites", 4.2999999999999998 },
+                    { 3, "Nassua", 2, "Grand Palldium", 4.0 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hotels_CountryId",
                 table: "Hotels",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_UniversityId",
-                table: "Students",
-                column: "UniversityId");
         }
 
         /// <inheritdoc />
@@ -99,13 +81,7 @@ namespace HotelListing.API.Migrations
                 name: "Hotels");
 
             migrationBuilder.DropTable(
-                name: "Students");
-
-            migrationBuilder.DropTable(
                 name: "Countries");
-
-            migrationBuilder.DropTable(
-                name: "Universitys");
         }
     }
 }
