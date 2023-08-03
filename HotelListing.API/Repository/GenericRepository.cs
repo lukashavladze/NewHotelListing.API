@@ -37,6 +37,9 @@ namespace HotelListing.API.Repository
 
         public async Task<List<T>> GetAllAsync()
         {
+
+
+
             return await _context.Set<T>().ToListAsync();    
         }
 
