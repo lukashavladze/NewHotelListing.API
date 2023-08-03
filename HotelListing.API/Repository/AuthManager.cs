@@ -34,9 +34,11 @@ namespace HotelListing.API.Repository
             var result = await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider, _refreshToken, newRefreshToken);
             return newRefreshToken;
         }
-
+       
         public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {
+
+
 
             _user = await _userManager.FindByEmailAsync(loginDto.Email);
             bool isValidUser = await _userManager.CheckPasswordAsync(_user, loginDto.Password);
