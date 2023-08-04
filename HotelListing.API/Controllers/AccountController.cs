@@ -28,10 +28,9 @@ namespace HotelListing.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
+
             _logger.LogInformation($"Registration Attempt for {apiUserDto.Email}");
-            try
-            {
-                var errors = await _authManager.Register(apiUserDto);
+            var errors = await _authManager.Register(apiUserDto);
 
                 if (errors.Any())
                 {
@@ -43,13 +42,7 @@ namespace HotelListing.API.Controllers
                 }
                 return Ok();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Something Went Wrong in {nameof(Register)} - User Registration Attempt for {apiUserDto.Email}");
-                return Problem($"Something Went Wrong in the {nameof(Register)}", statusCode: 500);
-            }
-           
-        }
+        
         //POST: api/Account/login
         [HttpPost]
         [Route("login")]
@@ -59,22 +52,15 @@ namespace HotelListing.API.Controllers
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
             _logger.LogInformation($"Login Attempt for {loginDto.Email} ");
-            try
+            var authResponse = await _authManager.Login(loginDto);
+        
+            if (authResponse == null)
             {
-                var authResponse = await _authManager.Login(loginDto);
-
-                if (authResponse == null)
-                {
-                    return Unauthorized();
-                }
-                return Ok(authResponse);
+                return Unauthorized();
             }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, $"Something Went Wrong in the {nameof(Login)}");
-                return Problem($"Something Went Wrong in the {nameof(Login)}", statusCode: 500);
+            return Ok(authResponse);
             }
-        }
+    
 
         //POST: api/Account/refreshtoken
         [HttpPost]
