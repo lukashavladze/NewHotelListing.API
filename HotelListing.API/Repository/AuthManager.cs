@@ -103,6 +103,8 @@ namespace HotelListing.API.Repository
 
         private async Task<String> GenerateToken()
         {
+
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
             
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
