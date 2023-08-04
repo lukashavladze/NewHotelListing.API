@@ -36,6 +36,7 @@ namespace HotelListing.API.Controllers
         {
             // does this
             // SELECT * FROM Countries
+
             var countries = await _countriesRepository.GetAllAsync();
             var records = _mapper.Map<List<GetCountryDto>>(countries);
             return Ok(records);
