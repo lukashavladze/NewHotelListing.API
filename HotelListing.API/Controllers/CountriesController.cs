@@ -13,6 +13,7 @@ using AutoMapper;
 using HotelListing.API.contracts;
 using Microsoft.AspNetCore.Authorization;
 using HotelListing.API.Exceptions;
+using HotelListing.API.Models;
 
 namespace HotelListing.API.Controllers
 {
@@ -33,8 +34,8 @@ namespace HotelListing.API.Controllers
             this._logger = logger;
         }
 
-        // GET: api/Countries
-        [HttpGet]
+        // GET: api/Countries/GetAll
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountries()
         {
             // does this
@@ -44,6 +45,19 @@ namespace HotelListing.API.Controllers
             var records = _mapper.Map<List<GetCountryDto>>(countries);
             return Ok(records);
         }
+
+        // GET: api/Countries/?StartIndex=0&pagesize=25&PageNumber=1
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<GetCountryDto>>> GetPagedCountries([FromQuery] QueryParameters queryParameters)
+        {
+            // does this
+            // SELECT * FROM Countries
+
+            var PagedCountriesResult = await _countriesRepository.GetAllAsync<GetCountryDto>(queryParameters);
+            
+            return Ok(PagedCountriesResult);
+        }
+
 
         // GET: api/Countries/5
         [HttpGet("{id}")]

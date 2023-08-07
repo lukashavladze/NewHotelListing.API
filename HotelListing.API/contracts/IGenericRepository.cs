@@ -1,10 +1,14 @@
-﻿namespace HotelListing.API.contracts
+﻿using HotelListing.API.Models;
+
+namespace HotelListing.API.contracts
 {
     public interface IGenericRepository<T> where T : class
     {
         Task<T> GetAsync(int? id);
 
         Task <List<T>> GetAllAsync();
+
+        Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParameters);
 
         Task<T> AddAsync(T entity);
 
